@@ -1,0 +1,22 @@
+{
+    "name": "orba/plugin-load-test",
+    "description": "Help plugin to deploy init files to Magento",
+    "type": "composer-plugin",
+    "license": "GPL-3.0",
+    "version": "0.1.0",
+    "authors": [],
+    "minimum-stability": "dev",
+    "require": {
+        "composer-plugin-api": "^1.1 || ^2.0",
+        "composer/composer": "^1.9 || ^2.0",
+        "magento/framework": "*"
+    },
+    "extra": {
+        "class": "Orba\\LoadTestPlugin\\Plugin"
+    },
+    "autoload": {
+        "psr-4": {
+            "Orba\\LoadTestPlugin\\": "src"
+        }
+    }
+}
