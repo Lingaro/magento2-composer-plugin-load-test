@@ -12,6 +12,7 @@ use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\PackageEvent;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
@@ -24,19 +25,15 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * @var IOInterface
      */
-    private $io;
+    private $ioInterface;
 
-    /**
-     * @var InventoryModuleDeployment
-     */
-    private $moduleDeployment;
-
-    public function activate(Composer $composer, IOInterface $io)
+    public function activate(Composer $composer, IOInterface $ioInterface)
     {
         $this->composer = $composer;
-        $this->io = $io;
+        $this->ioInterface = $ioInterface;
     }
 
+    // @codingStandardsIgnoreStart
     public static function getSubscribedEvents()
     {
         return [
@@ -44,15 +41,23 @@ class Plugin implements PluginInterface, EventSubscriberInterface
             'post-package-update' => 'onPackageChange',
         ];
     }
+    // @codingStandardsIgnoreEnd
 
+    /**
+     * @param PackageEvent $event
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function onPackageChange(PackageEvent $event): void
     {
         $operation = $event->getOperation();
+        $package = null;
         if ($operation instanceof InstallOperation) {
             $package = $operation->getPackage();
         } elseif ($operation instanceof UpdateOperation) {
             $package = $operation->getTargetPackage();
-        } else {
+        }
+
+        if (!$package) {
             return;
         }
 
@@ -64,9 +69,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $source = $installationManager->getInstallPath($package) . DIRECTORY_SEPARATOR . self::PATH_TO_DEPLOY;
         $target = getcwd() . DIRECTORY_SEPARATOR . self::PATH_TO_DEPLOY;
 
-        // Direcotry present
-        if(!is_dir($target)) {
-            mkdir($target, 0777, true);
+        // Directory present
+        if (!DriverInterface::isDirectory($target)) {
+            DriverInterface::createDirectory($target, 0777, true);
         }
 
         $this->copyWhenAbsent($source, $target);
@@ -75,16 +80,20 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * @param string $src
      * @param string $dst
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private function copyWhenAbsent(string $src, string $dst) : void {
+    private function copyWhenAbsent(string $src, string $dst): void
+    {
+        // @codingStandardsIgnoreStart
         $dir = opendir($src);
-        while(( $file = readdir($dir)) ) {
+        // @codingStandardsIgnoreEnd
+        while (($file = readdir($dir))) {
             $sourceFile = $src . DIRECTORY_SEPARATOR . $file;
             $targetFile = $dst . DIRECTORY_SEPARATOR . $file;
             if (( $file != '.' ) && ( $file != '..' )) {
                 // Not recursive!
-                if (is_file($sourceFile) && !file_exists($targetFile)) {
-                    copy($sourceFile, $targetFile);
+                if (DriverInterface::isFile($sourceFile) && !DriverInterface::isFile($targetFile)) {
+                    DriverInterface::copy($sourceFile, $targetFile);
                 }
             }
         }
@@ -94,14 +103,18 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * @inheritdoc
      */
-    public function deactivate(Composer $composer, IOInterface $io)
+    // @codingStandardsIgnoreStart
+    public function deactivate(Composer $composer, IOInterface $ioInterface)
     {
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * @inheritdoc
      */
-    public function uninstall(Composer $composer, IOInterface $io)
+    // @codingStandardsIgnoreStart
+    public function uninstall(Composer $composer, IOInterface $ioInterface)
     {
     }
+    // @codingStandardsIgnoreEnd
 }
