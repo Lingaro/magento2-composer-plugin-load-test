@@ -11,6 +11,9 @@
         "composer/composer": "^1.9 || ^2.0",
         "magento/framework": "*"
     },
+    "archive": {
+        "exclude": ["Makefile", "bitbucket-pipelines.yml"]
+    },
     "extra": {
         "class": "Orba\\LoadTestPlugin\\Plugin"
     },

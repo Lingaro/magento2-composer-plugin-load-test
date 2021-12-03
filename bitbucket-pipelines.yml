@@ -1,0 +1,41 @@
+image: atlassian/default-image:2
+
+# REQUIRED: Set environment variables in repository settings:
+#  - DOCKER_HUB_USERNAME
+#  - DOCKER_HUB_PASSWORD
+#  - COMPOSER_AUTH_BASE64
+
+options:
+  max-time: 20
+
+pipelines:
+  pull-requests:
+    # Sample change
+    '**': #this runs as default for any branch not elsewhere defined
+      - step:
+          services:
+            - docker
+          script:
+            - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
+            - make
+            - make hosts
+            - make smoke
+            - make test
+
+  branches:
+    master:
+      - step:
+          name: Build
+          services:
+            - docker
+          script:
+            - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
+            - make
+            - make hosts
+            - make smoke
+            - make test
+
+definitions:
+  services:
+    docker:
+      memory: 3056
