@@ -12,7 +12,6 @@ use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\PackageEvent;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
-use Magento\Framework\Filesystem\DriverInterface;
 
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
@@ -69,10 +68,11 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $source = $installationManager->getInstallPath($package) . DIRECTORY_SEPARATOR . self::PATH_TO_DEPLOY;
         $target = getcwd() . DIRECTORY_SEPARATOR . self::PATH_TO_DEPLOY;
 
-        // Directory present
-        if (!DriverInterface::isDirectory($target)) {
-            DriverInterface::createDirectory($target, 0777, true);
+        // @codingStandardsIgnoreStart
+        if (!is_dir($target)) {
+            mkdir($target, 0777, true);
         }
+        // @codingStandardsIgnoreEnd
 
         $this->copyWhenAbsent($source, $target);
     }
@@ -91,10 +91,11 @@ class Plugin implements PluginInterface, EventSubscriberInterface
             $sourceFile = $src . DIRECTORY_SEPARATOR . $file;
             $targetFile = $dst . DIRECTORY_SEPARATOR . $file;
             if (( $file != '.' ) && ( $file != '..' )) {
-                // Not recursive!
-                if (DriverInterface::isFile($sourceFile) && !DriverInterface::isFile($targetFile)) {
-                    DriverInterface::copy($sourceFile, $targetFile);
+                // @codingStandardsIgnoreStart
+                if (file_exists($sourceFile) && !file_exists($targetFile)) {
+                    copy($sourceFile, $targetFile);
                 }
+                // @codingStandardsIgnoreEnd
             }
         }
         closedir($dir);
