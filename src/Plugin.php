@@ -92,7 +92,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
             $targetFile = $dst . DIRECTORY_SEPARATOR . $file;
             if (( $file != '.' ) && ( $file != '..' )) {
                 // @codingStandardsIgnoreStart
-                if (file_exists($sourceFile) && !file_exists($targetFile)) {
+                if (file_exists($sourceFile) && is_file($sourceFile) && !file_exists($targetFile)) {
                     copy($sourceFile, $targetFile);
                 }
                 // @codingStandardsIgnoreEnd
