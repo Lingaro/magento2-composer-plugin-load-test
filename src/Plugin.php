@@ -1,8 +1,13 @@
 <?php
 
+/**
+ * Copyright © 2023 Lingaro sp. z o.o. All rights reserved.
+ * See LICENSE for license details.
+ */
+
 declare(strict_types=1);
 
-namespace Orba\LoadTestPlugin;
+namespace Lingaro\LoadTestPlugin;
 
 use Composer\Autoload\ClassLoader;
 use Composer\Composer;
@@ -15,7 +20,7 @@ use Composer\Plugin\PluginInterface;
 
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
-    private const OBSERVABLE_MODULE = "orba/module-load-test";
+    private const OBSERVABLE_MODULE = "lingaro/module-load-test";
     private const PATH_TO_DEPLOY = "dev" . DIRECTORY_SEPARATOR . "tools" . DIRECTORY_SEPARATOR . "locust";
     /**
      * @var Composer

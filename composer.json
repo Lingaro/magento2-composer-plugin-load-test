@@ -1,10 +1,15 @@
 {
-    "name": "orba/plugin-load-test",
+    "name": "lingaro/plugin-load-test",
     "description": "Help plugin to deploy init files to Magento",
     "type": "composer-plugin",
-    "license": "GPL-3.0",
+    "license": "proprietary",
     "version": "0.1.0",
-    "authors": [],
+    "authors": [
+        {
+            "name": "Lingaro sp. z o.o.",
+            "homepage": "https://lingarogroup.com/"
+        }
+    ],
     "minimum-stability": "dev",
     "require": {
         "composer-plugin-api": "^1.1 || ^2.0",
@@ -15,11 +20,11 @@
         "exclude": ["Makefile", "bitbucket-pipelines.yml"]
     },
     "extra": {
-        "class": "Orba\\LoadTestPlugin\\Plugin"
+        "class": "Lingaro\\LoadTestPlugin\\Plugin"
     },
     "autoload": {
         "psr-4": {
-            "Orba\\LoadTestPlugin\\": "src"
+            "Lingaro\\LoadTestPlugin\\": "src"
         }
     }
 }

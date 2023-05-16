@@ -1,5 +1,5 @@
 COMPONENT_NAME:=plugin-load-test
-COMPONENT:=orba/plugin-load-test
+COMPONENT:=lingaro/plugin-load-test
 SKELETON:=git@bitbucket.org:orbainternalprojects/skeleton.git
 
 TARGET_PATH:=source/packages/$(COMPONENT_NAME)
