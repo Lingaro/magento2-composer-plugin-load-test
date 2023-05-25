@@ -3,7 +3,7 @@
     "description": "Help plugin to deploy init files to Magento",
     "type": "composer-plugin",
     "license": "proprietary",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "authors": [
         {
             "name": "Lingaro sp. z o.o.",
